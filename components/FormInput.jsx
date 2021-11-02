@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, doc, getDoc, addDoc, setDoc } from "firebase/firestore";
 
 const Container = styled.div`
   width: 60%;
@@ -27,6 +27,7 @@ const FormInput = () => {
     mobileNumber: "",
   };
   var [values, setValues] = useState(initialFieldValues);
+
   const usersCollectionRef = collection(db, "users");
   const handleInputChange = (e) => {
     var { name, value } = e.target;
@@ -36,13 +37,24 @@ const FormInput = () => {
     });
   };
   const pushDb = async () => {
-    await addDoc(usersCollectionRef, values);
-  };
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    pushDb(values);
+    // await setDoc(usersCollectionRef, values);
+    await setDoc(doc(usersCollectionRef, values.mobileNumber), values);
   };
 
+  const check = async () => {
+    const docRef = doc(db, "users", values.mobileNumber);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      alert("yes");
+    } else {
+      pushDb(values);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    check();
+  };
   return (
     <Container>
       <Form autoComplete={0} onSubmit={handleFormSubmit}>
