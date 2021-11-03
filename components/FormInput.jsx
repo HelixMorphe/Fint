@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { db } from "../firebase";
+import { db, app } from "../firebase";
+import { getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { useDocument } from "react-firebase-hooks/firestore";
 import {
   collection,
   doc,
@@ -36,7 +38,7 @@ const FormInput = () => {
   // console.log(referredBy);
   const router = useRouter();
   const referredBy = router.query.referredBy;
-  console.log(referredBy);
+
   const initialFieldValues = {
     fullName: "",
     email: "",
@@ -61,9 +63,9 @@ const FormInput = () => {
   };
 
   const updateRef = async (id) => {
-    const refDoc = doc(db, "users", id);
+    const refDoc = doc(db, "users", id.slice(1, -1));
     const newFields = {
-      referredBy: id,
+      referrals: arrayUnion(values.mobileNumber),
     };
     await updateDoc(refDoc, newFields);
   };
@@ -73,7 +75,9 @@ const FormInput = () => {
     if (docSnap.exists()) {
     } else {
       pushDb(values);
-      updateRef(router.query.referredBy);
+      {
+        router.query.referredBy && updateRef(router.query.referredBy);
+      }
     }
 
     //Redirecting User

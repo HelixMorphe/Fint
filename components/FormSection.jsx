@@ -2,7 +2,7 @@ import { Slider } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-
+import Carousel from "./Carousel";
 const Container = styled.div`
   height: 100vh;
   background: #00b4db;
@@ -17,7 +17,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   height: 80vh;
   margin: auto;
-  width: 60vw;
+  /* width: 60vw; */
   background-color: white;
   border-radius: 1rem;
 `;
@@ -71,34 +71,15 @@ const FormSection = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(inputs.age);
   };
 
   return (
     <Container id="form-section">
+      <Carousel />
       <Wrapper>
         <Form onSubmit={handleSubmit}>
           <Title>Tell us you’re saving without telling us you’re saving</Title>
           <FormContainer>
-            {/* <label>
-              Enter your name:
-              <input
-                type="text"
-                name="username"
-                value={inputs.username || ""}
-                onChange={handleChange}
-              />
-            </label>
-            <label>
-              Enter your age:
-              <input
-                type="number"
-                name="age"
-                value={inputs.age || ""}
-                onChange={handleChange}
-              />
-            </label>
-            <input type="submit" /> */}
             <OptionsContainer>
               <Option>
                 <Label>How much are you willing to spend?</Label>

@@ -2,23 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  addDoc,
-  setDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-} from "firebase/firestore";
+import { collection, query, where, orderBy, limit } from "firebase/firestore";
 
-import {
-  useCollectionOnce,
-  useCollection,
-} from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 const Container = styled.div`
   border-radius: 1rem;
@@ -81,7 +67,7 @@ const LeaderBoard2 = ({ mobile }) => {
 
   //Leaders
 
-  const q1 = query(usersCollectionRef, orderBy("referrals", "asc"), limit(10));
+  const q1 = query(usersCollectionRef, orderBy("referrals", "desc"), limit(10));
   const [leadersValue, leadersLoading, leadersError] = useCollection(q1, {});
 
   return (
@@ -90,9 +76,9 @@ const LeaderBoard2 = ({ mobile }) => {
       {leadersValue &&
         leadersValue.docs.map((doc, index) => (
           <Rank key={doc.id}>
-            <Index>{index}</Index>
+            <Index>{index + 1}</Index>
             <Name>{doc.data().fullName}</Name>
-            <Points>10</Points>
+            <Points>{(doc.data().referrals.length - 1) * 10}</Points>
           </Rank>
         ))}
     </Container>
