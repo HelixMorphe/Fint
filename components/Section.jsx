@@ -78,3 +78,13 @@ const Section = () => {
 };
 
 export default Section;
+
+// const q = query(
+//   collection(db, "users"),
+//   where("mobileNumber", "==", values.mobileNumber)
+// );
+// const querySnapshot = await getDoc(q);
+
+// querySnapshot.forEach((doc) => {
+//   console.log(doc.id, " => ", doc.data());
+// });

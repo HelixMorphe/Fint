@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
-import { collection, doc, getDoc, addDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+  query,
+  where,
+} from "firebase/firestore";
 
 const Container = styled.div`
   width: 60%;
@@ -21,10 +31,13 @@ const Input = styled.input`
 `;
 
 const FormInput = () => {
+  const router = useRouter();
   const initialFieldValues = {
     fullName: "",
     email: "",
     mobileNumber: "",
+    referredBy: "",
+    referrals: [""],
   };
   var [values, setValues] = useState(initialFieldValues);
 
@@ -45,10 +58,12 @@ const FormInput = () => {
     const docRef = doc(db, "users", values.mobileNumber);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      alert("yes");
     } else {
       pushDb(values);
     }
+
+    //Redirecting User
+    router.push(`/users/${values.mobileNumber}`);
   };
 
   const handleFormSubmit = (e) => {
