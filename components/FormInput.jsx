@@ -9,6 +9,8 @@ import {
   getDocs,
   addDoc,
   setDoc,
+  updateDoc,
+  arrayUnion,
   query,
   where,
 } from "firebase/firestore";
@@ -31,17 +33,21 @@ const Input = styled.input`
 `;
 
 const FormInput = () => {
+  // console.log(referredBy);
   const router = useRouter();
+  const referredBy = router.query.referredBy;
+  console.log(referredBy);
   const initialFieldValues = {
     fullName: "",
     email: "",
     mobileNumber: "",
-    referredBy: "",
+    referredBy: referredBy | "",
     referrals: [""],
   };
   var [values, setValues] = useState(initialFieldValues);
 
   const usersCollectionRef = collection(db, "users");
+
   const handleInputChange = (e) => {
     var { name, value } = e.target;
     setValues({
@@ -49,17 +55,25 @@ const FormInput = () => {
       [name]: value,
     });
   };
+
   const pushDb = async () => {
-    // await setDoc(usersCollectionRef, values);
     await setDoc(doc(usersCollectionRef, values.mobileNumber), values);
   };
 
+  const updateRef = async (id) => {
+    const refDoc = doc(db, "users", id);
+    const newFields = {
+      referredBy: id,
+    };
+    await updateDoc(refDoc, newFields);
+  };
   const check = async () => {
     const docRef = doc(db, "users", values.mobileNumber);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
     } else {
       pushDb(values);
+      updateRef(router.query.referredBy);
     }
 
     //Redirecting User

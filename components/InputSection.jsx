@@ -29,7 +29,7 @@ const FormContainer = styled.div`
   flex: 1;
 `;
 
-export const InputSection = () => {
+export const InputSection = ({ referredBy }) => {
   return (
     <Container>
       <Wrapper>

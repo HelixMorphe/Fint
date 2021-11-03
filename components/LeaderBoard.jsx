@@ -70,7 +70,7 @@ const LeaderBoard = ({ mobile }) => {
     const getUser = async () => {
       const q = query(
         usersCollectionRef,
-        where("mobileNumber", "==", mobile || "94")
+        where("mobileNumber", "==", mobile || "25")
       );
       const querySnapshot = await getDocs(q);
       setUser(
