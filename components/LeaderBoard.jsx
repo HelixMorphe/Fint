@@ -63,22 +63,30 @@ const Points = styled.div`
 `;
 
 const LeaderBoard = ({ mobile }) => {
+  const router = useRouter();
+
   const [leaders, setLeaders] = useState([]);
   const [user, setUser] = useState([]);
+
   const usersCollectionRef = collection(db, "users");
   useEffect(() => {
     const getUser = async () => {
-      const q = query(
-        usersCollectionRef,
-        where("mobileNumber", "==", mobile || "25")
-      );
-      const querySnapshot = await getDocs(q);
-      setUser(
-        querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }))
-      );
+      try {
+        const q = query(
+          usersCollectionRef,
+          where("mobileNumber", "==", router.query.mobNumb || "25")
+        );
+        // console.log(q);
+        const querySnapshot = await getDocs(q);
+        setUser(
+          querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }))
+        );
+      } catch (err) {
+        console.log(err);
+      }
     };
     getUser();
   }, []);
